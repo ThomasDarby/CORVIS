@@ -9,6 +9,12 @@ CORVIS is a simple, flexible Python library designed to let small organizations 
 1. **Easy-to-use plotting tool.** Quickly plot and compare data using a single plotting function
 1. **Standard data formats.** All data is stored as `pandas` DataFrames, so advanced users can use their favorite tools and applications for deeper research.
 
+# Installing CORVIS
+
+Install CORVIS quickly and easily using `pip`:
+
+	pip install corvis
+
 # Examples
 
 Load, filter, analyze, and plot data with just a few lines of code!
