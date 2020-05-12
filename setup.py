@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="corvis",
-    version="0.0.10",
+    version="0.0.11",
     author="Tom Darby",
     author_email="tom@tmdarby.com",
     description="COVID-19 Rapid Visualization",

@@ -9,6 +9,46 @@ CORVIS is a simple, flexible Python library designed to let small organizations 
 1. **Easy-to-use plotting tool.** Quickly plot and compare data using a single plotting function
 1. **Standard data formats.** All data is stored as `pandas` DataFrames, so advanced users can use their favorite tools and applications for deeper research.
 
+# Examples
+
+Load, filter, analyze, and plot data with just a few lines of code!
+
+	from corvis.corvis import *
+
+	unifiedDataCORVIS = LoadCORVISData(verbose=True)
+
+	corvisDataToPlot = FilterCORVISData(unifiedDataCORVIS, country='US', aggregateBy=CORVISAggregations.COUNTRY, metric=CORVISMetrics.CONFIRMED, sourceData=CORVISDatasources.ALL, combineDatasources=CORVISCombineDatasourcesBy.MAX)
+
+	CreateCORVISPlot(corvisDataToPlot, graphTitle='United States: Confirmed Cases')
+
+
+A more advanced example:
+
+		from corvis.corvis import *
+
+		unifiedDataCORVIS = LoadCORVISData(verbose=True)
+
+		corvisDataToPlot = FilterCORVISData(unifiedDataCORVIS, country='US', state=['NY', 'NJ'], aggregateBy=CORVISAggregations.COUNTRY, metric=CORVISMetrics.CONFIRMED, sourceData=CORVISDatasources.ALL, combineDatasources=CORVISCombineDatasourcesBy.MAX)
+		stayHomeCorvisDataToPlot = FilterCORVISData(unifiedDataCORVIS, country='US', state=['!NY', '!NJ', '!IA', '!NE', '!ND', '!SD', '!AR','!WY', '!UT', '!OK'], aggregateBy=CORVISAggregations.COUNTRY, metric=CORVISMetrics.CONFIRMED, sourceData=CORVISDatasources.ALL, combineDatasources=CORVISCombineDatasourcesBy.MAX)
+		stayHomePartialCorvisDataToPlot = FilterCORVISData(unifiedDataCORVIS, country='US', state=['WY', 'UT', 'OK'], aggregateBy=CORVISAggregations.COUNTRY, metric=CORVISMetrics.CONFIRMED, sourceData=CORVISDatasources.ALL, combineDatasources=CORVISCombineDatasourcesBy.MAX)
+		StayHomeNoneCorvisDataToPlot = FilterCORVISData(unifiedDataCORVIS, country='US', state=['IA', 'NE', 'ND', 'SD', 'AR'], aggregateBy=CORVISAggregations.COUNTRY, metric=CORVISMetrics.CONFIRMED, sourceData=CORVISDatasources.ALL, combineDatasources=CORVISCombineDatasourcesBy.MAX)
+
+		corvisDataToPlot = corvisDataToPlot.append(stayHomeCorvisDataToPlot, ignore_index=True)
+		corvisDataToPlot = corvisDataToPlot.append(stayHomePartialCorvisDataToPlot, ignore_index=True)
+		corvisDataToPlot = corvisDataToPlot.append(StayHomeNoneCorvisDataToPlot, ignore_index=True)
+
+		corvisDataToPlot = ComputeCORVISPerCapita(corvisDataToPlot, 100000)
+		corvisDataToPlot = ComputeCORVISMovingAverage(corvisDataToPlot, 14)
+		corvisDataToPlot = ComputeCORVISMovingAverage(corvisDataToPlot, 14)
+
+		corvisDataToPlot = ComputeCORVISDailyChange(corvisDataToPlot)
+		corvisDataToPlot = ComputeCORVISDailyChange(corvisDataToPlot)
+
+		graphLegend = ['New York and New Jersey', 'Stay-at-home order, statewide (minus NY/NJ)', 'Stay-at-home order, some areas',  'No stay-at-home order']
+
+		CreateCORVISPlot(corvisDataToPlot, graphLegend, 'United States: Confirmed Cases – Per-Capita Rate of Change (14-day double moving average)', xLabel='Date', yLabel='Daily change per 100k people', startGraphAtThreshold=0.05)
+
+ 
 
 # Functions
 
