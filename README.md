@@ -1,3 +1,6 @@
+
+![CORVIS Title Image: a stylized crow's head icon with the text 'CORVIS: COVID-19 RAPID VISUALIZATION'](https://github.com/ThomasDarby/CORVIS/blob/master/title.png "CORVIS: COVID-19 RAPID VISUALIZATION")
+
 # CORVIS
 ### **CO**VID-19 **R**apid **Vis**ualization
 
