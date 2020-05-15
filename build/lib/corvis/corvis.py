@@ -286,8 +286,8 @@ def LoadCORVISData(datasourceToLoad = CORVISDatasources.ALL, dataPath='./', forc
 
     if verbose:
       print('Loading CTP data...')
-    ctpMetrics = ['positive', 'negative', 'hospitalizedCumulative', 'inIcuCumulative', 'onVentilatorCumulative', 'recovered']
-    ctpMetricEnums = [CORVISMetrics.CONFIRMED, CORVISMetrics.NEGATIVE, CORVISMetrics.HOSPITALIZED, CORVISMetrics.ICU, CORVISMetrics.VENTILATOR, CORVISMetrics.RECOVERED]
+    ctpMetrics = ['positive', 'negative', 'hospitalizedCumulative', 'inIcuCumulative', 'onVentilatorCumulative', 'recovered', 'death']
+    ctpMetricEnums = [CORVISMetrics.CONFIRMED, CORVISMetrics.NEGATIVE, CORVISMetrics.HOSPITALIZED, CORVISMetrics.ICU, CORVISMetrics.VENTILATOR, CORVISMetrics.RECOVERED, CORVISMetrics.DEATH]
     ctpDataframes = []
 
     proceedWithDownload = False
@@ -601,27 +601,6 @@ def FilterCORVISData(sourceCORVISDataframe, country=None, state=None, county=Non
       if us.states.lookup(notState[i]):
         notState[i] = str(us.states.lookup(notState[i]))
 
-  # it's possible the above 'not' filtering set some of our arrays to 'None'.
-  # Address that here.
-
-  # if country is None:
-  #   country = []
-  
-  # if county is None:
-  #   county = []
-
-  # if state is None:
-  #   state = []
-
-  # if notCountry is None:
-  #   notCountry = []
-  
-  # if notCounty is None:
-  #   notCounty = []
-
-  # if notState is None:
-  #   notState = []
-
 
 
   # filter before we aggregate: it's faster!
@@ -671,8 +650,8 @@ def FilterCORVISData(sourceCORVISDataframe, country=None, state=None, county=Non
 
     for colName in sourceCORVISDataframe:
       if not (colName in CORVISAggregatorColumnNames):
-        if (colName in ['Lat', 'Long', 'Population']):
-          aggregatorTuples[colName]='max'
+        if (colName in ['Lat', 'Long']):
+          aggregatorTuples[colName]='mean'
         else:
           aggregatorTuples[colName]='sum'
     
@@ -720,11 +699,14 @@ def FilterCORVISData(sourceCORVISDataframe, country=None, state=None, county=Non
   # Thus, if our last column in the return set is all zeroes, drop it.
   # repeat this process until all empty columns are gone.
 
-  while (returnDataframe.iloc[:,-1].isna()).all():
-    returnDataframe = returnDataframe.iloc[:, :-1]
+  try:
+    while (returnDataframe.iloc[:,-1].isna()).all():
+      returnDataframe = returnDataframe.iloc[:, :-1]
 
-  while (returnDataframe.iloc[:,-1] == 0).all():
-    returnDataframe = returnDataframe.iloc[:, :-1]
+    while (returnDataframe.iloc[:,-1] == 0).all():
+      returnDataframe = returnDataframe.iloc[:, :-1]
+  except:
+    raise ValueError('Error: the filtered dataset is empty.')
 
   return returnDataframe
   
